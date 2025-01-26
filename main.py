@@ -1,3 +1,6 @@
+#
+# To activate the virtual environment, first run: source venv/bin/activate 
+
 # this allows us to use code from
 # the open-source pygame library
 # throughout this file
@@ -13,8 +16,18 @@ def main():
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    
+    # Create groups
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
     # Instantiate Player object
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
+    # Add player to groups manually
+    updatable.add(player)
+    drawable.add(player)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -22,8 +35,13 @@ def main():
         # Fill the screen with black
         screen.fill((0, 0, 0))
 
-        # Draw the player sprite
-        player.draw(screen)
+        # Hook updates
+        for sprite in updatable:
+            sprite.update(dt)
+
+        # Draw the sprites
+        for sprite in drawable:
+            sprite.draw(screen)
 
         # Move to the next frame
         pygame.display.flip()
