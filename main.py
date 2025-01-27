@@ -7,6 +7,8 @@
 import pygame
 from constants import *
 from player import *
+from asteroid import *
+from asteroidfield import *
 
 def main():
     pygame.init()
@@ -20,13 +22,20 @@ def main():
     # Create groups
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroid_group = pygame.sprite.Group()
 
-    # Instantiate Player object
+    # Set containers BEFORE creating instances
+    Asteroid.containers = (asteroid_group, updatable, drawable)
+    AsteroidField.containers = (updatable,)  # Note the comma to make it a tuple
+
+    # Instantiate objects AFTER setting containers
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    asteroidfield = AsteroidField()
 
-    # Add player to groups manually
+    # Add player manually (since it doesn't use containers)
     updatable.add(player)
     drawable.add(player)
+
 
     while True:
         for event in pygame.event.get():
@@ -39,9 +48,16 @@ def main():
         for sprite in updatable:
             sprite.update(dt)
 
+        for roid in asteroid_group:
+            if roid.collides_with(player):
+                print(" - - - G a m e   o v e r ! - - - ")
+                exit()
+
+
         # Draw the sprites
         for sprite in drawable:
             sprite.draw(screen)
+            
 
         # Move to the next frame
         pygame.display.flip()
