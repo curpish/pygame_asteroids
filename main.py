@@ -4,7 +4,7 @@
 # this allows us to use code from
 # the open-source pygame library
 # throughout this file
-import pygame
+import pygame # type: ignore
 from constants import *
 from player import *
 from asteroid import *
