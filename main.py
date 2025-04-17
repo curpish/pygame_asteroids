@@ -53,6 +53,10 @@ def main():
             sprite.update(dt)
 
         for roid in asteroid_group:
+            for shot in shots:
+                if shot.collides_with(roid):
+                    roid.kill()
+                    shot.kill()
             if roid.collides_with(player):
                 print(" - - - G a m e   o v e r ! - - - ")
                 exit()
